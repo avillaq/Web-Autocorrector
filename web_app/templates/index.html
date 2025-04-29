@@ -1,39 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Autorrector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-  <h1>Autorrector</h1>
-  <form method="post">
-    <label for="texto">Ingresa el texto</label><br>
-    <textarea id="texto" name="texto" rows="4" cols="50" required>{{ texto }}</textarea><br><br>
-    <input type="submit" value="Enviar">
-  </form>
-  <p>O</p>
-  <p>Selecciona multiples archivos de texto:</p>
-  <form method="post" enctype="multipart/form-data">
-    <input type="file" name="archivos" multiple accept=".txt" required><br><br>
-    <input type="submit" value="Enviar archivos">
-  </form>
+  <div class="container">
+    <h1>Autorrector</h1>
+    
+    <div class="formulario-texto">
+      <form method="post">
+        <label for="texto">Ingresa el texto a corregir:</label>
+        <textarea id="texto" name="texto" rows="6" cols="50" required>{{ texto }}</textarea>
+        <input type="submit" value="Corregir texto">
+      </form>
+    </div>
+    
+    <div class="divider">
+      <span>O</span>
+    </div>
+    
+    <div class="formulario-archivos">
+      <h2>Corrección de archivos</h2>
+      <form method="post" enctype="multipart/form-data">
+        <label for="archivo-input">Selecciona múltiples archivos de texto:</label>
+        <input id="archivo-input" type="file" name="archivos" multiple accept=".txt" required>
+        <input type="submit" value="Corregir archivos">
+      </form>
+    </div>
+  </div>
 
   {% if texto_corregido %}
+  <div class="container">
     <h2>Texto corregido:</h2>
-    <p>{{ texto_corregido }}</p>
+    <div class="resultado">{{ texto_corregido }}</div>
+  </div>
   {% endif %}
+  
   {% if archivos_corregidos %}
+  <div class="container">
     <h2>Archivos corregidos:</h2>
-    <ul>
+    <ul class="archivos-lista">
       {% for archivo in archivos_corregidos %}
-        <li>
-          <strong>{{ archivo.nombre }}</strong>
-          <p>{{ archivo.texto_corregido }}</p>
-          <a href="{{archivo.url}}">Descargar</a>
-        </li>
+      <li class="archivo-item">
+        <strong>{{ archivo.nombre }}</strong>
+        <p>{{ archivo.texto_corregido }}</p>
+        <a href="{{ archivo.url }}" class="boton-descargar">Descargar archivo corregido</a>
+      </li>
       {% endfor %}
     </ul>
+  </div>
   {% endif %}
 </body>
 </html>
